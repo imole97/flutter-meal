@@ -60,29 +60,39 @@ class _MealCategoriesScreenState extends State<MealCategoriesScreen>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation:
-          _animationController, // tells the animation builder when to call the builder function
-      // the child property is for widgets that  will be outputted with the animated content but will not be animated
-      child: GridView(
-        padding: const EdgeInsets.all(24),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
+        animation:
+            _animationController, // tells the animation builder when to call the builder function
+        // the child property is for widgets that  will be outputted with the animated content but will not be animated
+        child: GridView(
+          padding: const EdgeInsets.all(24),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 3 / 2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+          ),
+          children: availableCategories.map((category) {
+            return CategoryGridItem(
+              onSelectCategory: _handleSelectCategory,
+              category: category,
+              key: ValueKey(category.categoryId),
+            );
+          }).toList(),
         ),
-        children: availableCategories.map((category) {
-          return CategoryGridItem(
-            onSelectCategory: _handleSelectCategory,
-            category: category,
-            key: ValueKey(category.categoryId),
-          );
-        }).toList(),
-      ),
-      builder: (context, child) => Padding(
-        padding: EdgeInsets.only(top: 100 - _animationController.value * 100),
-        child: child,
-      ),
-    );
+        builder: (context, child) => SlideTransition(
+              position: Tween(
+                begin: const Offset(0, 0.3),
+                end: const Offset(0, 0),
+              ).animate(
+                CurvedAnimation(
+                    parent: _animationController, curve: Curves.easeInOut),
+              ),
+              child: child,
+            )
+        // Padding(
+        //   padding: EdgeInsets.only(top: 100 - _animationController.value * 100),
+        //   child: child,
+        // ),
+        );
   }
 }
