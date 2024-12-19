@@ -8,7 +8,7 @@ import 'package:transparent_image/transparent_image.dart';
 class MealItem extends StatelessWidget {
   const MealItem({super.key, required this.meal, required this.onSelectMeal});
   final Meal meal;
-  final void Function( Meal meal) onSelectMeal;
+  final void Function(Meal meal) onSelectMeal;
   String get complexityText {
     return meal.complexity.name[0].toUpperCase() +
         meal.complexity.name.substring(1);
@@ -29,19 +29,23 @@ class MealItem extends StatelessWidget {
       elevation: 2,
       child: InkWell(
         onTap: () {
-          onSelectMeal( meal);
+          onSelectMeal(meal);
         },
         child: Stack(
           children: [
-            FadeInImage(
-                placeholder: MemoryImage(
-                    kTransparentImage), //decodes a [Uint8List] buffer as an image
-                image: NetworkImage(meal.imageUrl), //loads image from urls
-                fit: BoxFit.cover,
-                height: 200,
-                width: double
-                    .infinity //resizes the image to fit the container while maintaining aspect ratio
-                ),
+            // hero helps to animate widget across screens
+            Hero(
+              tag: meal.id,
+              child: FadeInImage(
+                  placeholder: MemoryImage(
+                      kTransparentImage), //decodes a [Uint8List] buffer as an image
+                  image: NetworkImage(meal.imageUrl), //loads image from urls
+                  fit: BoxFit.cover,
+                  height: 200,
+                  width: double
+                      .infinity //resizes the image to fit the container while maintaining aspect ratio
+                  ),
+            ),
             Positioned(
               bottom: 0,
               left: 0,
